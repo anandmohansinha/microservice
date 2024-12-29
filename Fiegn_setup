@@ -1,0 +1,68 @@
+Requirment:
+My Student service want to communicate with School server
+When i try to get the school, i want all students of that school.
+So school microservice required data from student microservice
+so school microservice required some mechanism to get student data.
+suppose that api getStudent() is there in student microservice
+This Api school microservice has to call.So school microservice create a interface annotate it with @FeighClient
+and add same api getStudent() there.
+How it go to student microservice and call same api
+we need to provide URL of student microservice
+@FeignClient(name= "student-service", url="${application.config.students-url}")
+
+
+---------------------------------------------------------------
+In Student microservice > domain > Student entity
+
+add a property private Integer schoolId; # we have to ensure data integrity manually
+School microservice
+~~~~~~~~~~~~~~~~~~~~~`
+step1: Go to school controller and create a new API
+    "/with-student/{school-id}"
+
+    service: create a method
+    FullSchoolResponse finsSchoolWithStudents(SchoolId)
+step2: create a new class called FullSchoolResponse which contains Student Objects also
+        which we do not have in School microservice
+        Create a Student DTO.
+Step3: implements FullSchoolResponse finsSchoolWithStudents(SchoolId){
+        // school is current microservice so directly we are calling
+             var school = repository.findById(schoolId).orElse(School.builder().name("Notfound").build());
+         ?? var students = null; // find all the students from student microservices[THIS WE NEED TO IMPLEMENT]
+        }
+
+ Implementation
+ -------------------
+ StudentController
+
+@GetMapping("/school/{school-id}")  ***********************
+ResponseEntity<List<Student>> findAllStudent(@Pathvariable("school-id") Integer schoolId){
+
+}
+service implemetation
+repository
+
+------------------------------------------------------------------------------
+come back to School microservice
+step1 : add a new dependency "OpenFeign"
+step2. create client.StudentClient Interface [it creates a client folder and then add a interface in it]
+
+             @FiegnClient(name = "student-service" , url="${applica
+             tion.config.students-url}")
+             public interface StudentClient{}
+
+step 3: Go to application.yml add below property
+        application:
+           config:
+             student-url: http://localhost:8090/api/v1/students  [8090 is student microservice port]
+
+step 4: continue step2
+           @GetMapping("school /{school-id}")  - [school/{school-id}  we have created this API in ] *************
+           List<Student> findAllStudentsBySchool(@PathVariable("school-id") Integer schoolId);
+
+step 5: Go to School service [This is continuation of part 1 step3:]
+         inject StudentClient client
+          client.findAllStudentsBySchool(id)
+
+step 6:
+

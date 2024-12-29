@@ -1,0 +1,7 @@
+Problem:
+com.fasterxml.jackson.databind.exc.InvalidDefinitionException:
+No serializer found for class com.anand.school.dto.Student and no properties discovered to create
+ BeanSerializer (to avoid exception, disable SerializationFeature.FAIL_ON_EMPTY_BEANS)
+ (through reference chain: com.anand.school.dto
+
+ Solution: lombok was not working , so i added getter and setter in student

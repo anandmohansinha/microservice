@@ -1,0 +1,28 @@
+# add eureka configuration
+eureka:
+  instance:
+    hostname: localhost # eureka instance which we have created has name localhost
+  client: # I want to register with Eureka server, where it is?
+    service-url:
+      defaultZone: http://localhost:8761/eureka  # it is in this location
+
+server:
+  port: 8070
+
+
+application:
+  config:
+    students-url: http://localhost:8222/api/v1/students
+
+spring:
+  application:
+    name: schools
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/school_microservice?characterEncoding=UTF-8
+    username: root
+    password: test
+  jpa:
+    hibernate:
+      ddl-auto: create
+

@@ -1,0 +1,42 @@
+I do not want any local conmfiguration of any project.All projects configuration has to be there at
+ centralize place.
+ For that we have to use config server.
+
+ step 1: configure your config server.
+
+
+spring:
+  profiles:
+    active: native
+native profile tells the Config Server to load configuration files from the local classpath:/config folder or any specified location.
+This is particularly useful for local development or testing, where you don't want to rely on a remote Git repository.
+
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/configurations
+
+ create a folder under resources name configurations
+
+ Step 2: Go to main app class and add annotation @EnableConfigServer
+
+step3: copy one by one all application.yml and put it in configurations folder in config-server
+         and new file name will be same as original location(school/application.properties) below properties
+         spring:
+           application:
+             name: schools
+
+step 4: remove below line of code from (school.yml) file
+  config:
+    import: optional:configserver:http://localhost:8888
+
+    because all properties are already there in config server
+step 5: remove everything from (school/application.yml) except below properties
+        spring:
+          application:
+            name: schools
+          config:
+            import: optional:configserver:http://localhost:8888
+
+
